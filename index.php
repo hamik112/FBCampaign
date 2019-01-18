@@ -23,11 +23,12 @@
  */
 
 // Configurations
-$access_token = 'EAAEIw2VSmIkBAFZAdTOKjt0H0wPxe7Qkh1t4K08ZBorhl1NantDvwZAZCDRxQji8pSTkCvVWq3gJloPsG3nBywjN0cFseuP9Clb1bmPGOXAjd36IHsvYoEhHE1HhIsab9UYRj3Xt2ZAYHgqljUIZCvZCY7vcwiJgql86H64GKvnDWSdZADRZB2QlLjtaQaQ1UwBUygFLFbBulMHRWZAcRltvWM';
-$app_id = '291110288267401';
-$app_secret = '69fc77650e02a05f1d260a460ea34b1f';
+//EAAgFqBInoZCMBAAQGbtZCx4DAHcZAYEzXhGDoov04ykGOYGrOeiPeicojg3dJZBriNBDchHL4CLxwwPzSSdB1QZAZBMH5jl2fEVUbsZCQpAaNV2oCAz0K4bluXm34vMPDA4UZAP1PZC79DoLjUrkQ8Rufo4OlzlVgK1s6M5cUTA6ZCmhh63LOoRGcfhln6cUFuwyu0ourHTXCmgXBDXknztjitktnDPBZByQXMZD
+$access_token = 'EAAgFqBInoZCMBABG3oCRvM59PDiSfNC29rwotLvoYAmnyXZCWfWZAXel1k9XAetVMt5h6oAsE3V8sSAu4v9UunrfHG5ksJT8qhq7UBEQFD3ZC7VTa62BPG5ZCA3D40KD4euWTZCEhothd6Vv9gbEhyDn6MX5XnqLABUATMhVbGwZA50uePocTiGthahAwThNAEZD';
+$app_id = '2258019230917619';
+$app_secret = '9f0a797e6f6392454060011edcc8d80d';
 // should begin with "act_" (eg: $account_id = 'act_1234567890';)
-$account_id = 'act_1166285790162852';
+$account_id = 'act_376410623121276';
 define('SDK_DIR', __DIR__ . '/facebook-php-ads-sdk'); // Path to the SDK directory
 $loader = include SDK_DIR.'/vendor/autoload.php';
 date_default_timezone_set('America/Los_Angeles');
@@ -145,7 +146,7 @@ use FacebookAds\Object\Fields\AdCreativeLinkDataChildAttachmentFields;
 use FacebookAds\Object\AdCreativeLinkDataChildAttachment;
 use FacebookAds\Object\AdCreativeLinkData;
 use FacebookAds\Object\AdCreativeObjectStorySpec;
-//
+
 //$product = (new AdCreativeLinkDataChildAttachment())->setData(array(
 //	AdCreativeLinkDataChildAttachmentFields::LINK =>
 //		'https://www.link.com/product',
@@ -155,7 +156,8 @@ use FacebookAds\Object\AdCreativeObjectStorySpec;
 //
 //));
 //$product->create();
-//
+//echo 'Image Hash: '.$product->id . "\n";
+
 //$link_data = new AdCreativeLinkData();
 //$link_data->setData(array(
 //	AdCreativeLinkDataFields::LINK => 'https://www.google.com/',
@@ -163,30 +165,45 @@ use FacebookAds\Object\AdCreativeObjectStorySpec;
 //		$product->id,
 //	),
 //));
-//
-//$object_story_spec = new AdCreativeObjectStorySpec();
-//$object_story_spec->setData(array(
-//	AdCreativeObjectStorySpecFields::PAGE_ID => '392761521486556',
-//	AdCreativeObjectStorySpecFields::LINK_DATA => $link_data,
-//));
 
-//$creative = new AdCreative(null, $account->id);
-//$creative->setData(array(
-//	AdCreativeFields::NAME => 'Sample Creative',
-////	AdCreativeFields::OBJECT_STORY_SPEC => $object_story_spec,
-//));
-//
-//$creative->create();
-$fields = array(
-);
-$params = array(
-	'object_story_id' => '392761521486556',
+$link_data = new AdCreativeLinkData();
+$link_data->setData(
+	array(
+		AdCreativeLinkDataFields::CAPTION => 'test',
+//                            AdCreativeLinkDataFields::DESCRIPTION => safeReturnArray($arrAdCreative, '', masterLocalAds::ColName_description), // This goes as News Feed Link ON UI
+		AdCreativeLinkDataFields::DESCRIPTION => 'test', // This goes as News Feed Link ON UI
+//                            AdCreativeLinkDataFields::MESSAGE => safeReturnArray($arrAdCreative, '', masterLocalAds::ColName_title), // This goes as TEXT on UI
+		AdCreativeLinkDataFields::MESSAGE => 'test', // This goes as TEXT on UI
+		AdCreativeLinkDataFields::LINK => 'https://www.google.com/',
+		AdCreativeLinkDataFields::IMAGE_HASH => $image->hash,
+		AdCreativeLinkDataFields::NAME => 'test', // This goes as Headline on UI
+	)
 );
 
-$creative = (new AdAccount($account->id))->createAdCreative(
-	$fields,
-	$params
-);
+$object_story_spec = new AdCreativeObjectStorySpec();
+$object_story_spec->setData(array(
+	AdCreativeObjectStorySpecFields::PAGE_ID => '280414105957276',
+	AdCreativeObjectStorySpecFields::LINK_DATA => $link_data,
+));
+
+$creative = new AdCreative();
+$creative->setParentId($account->id);
+$creative->setData(array(
+	AdCreativeFields::NAME => 'Sample Creative',
+	AdCreativeFields::OBJECT_STORY_SPEC => $object_story_spec,
+));
+
+$creative->create();
+//$fields = array(
+//);
+//$params = array(
+//	'object_story_id' => '280414105957276',
+//);
+//
+//$creative = (new AdAccount($account->id))->createAdCreative(
+//	$fields,
+//	$params
+//);
 echo 'Creative ID: '.$creative->id . "\n";
 
 
